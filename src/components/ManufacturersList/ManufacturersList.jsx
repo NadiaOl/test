@@ -20,7 +20,7 @@ const ManufacturersManager = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username: '', password: '' })
-          // TODO: username password
+          // TODO: add username password
         });
         const authData = await authRes.json();
         setToken(authData.token);
