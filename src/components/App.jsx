@@ -1,9 +1,9 @@
-import ManufacturersList from "./ManufacturersList/ManufacturersList";
+// import ManufacturersList from "./ManufacturersList/ManufacturersList";
 
-export const App = () => {
- <ManufacturersList></ManufacturersList>
-  return (
-  {}
-)
+// export const App = () => {
+//  <ManufacturersList></ManufacturersList>
+//   return (
+//   {}
+// )
 
-};
+// };
