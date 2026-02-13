@@ -1,4 +1,4 @@
-import ManufacturersList from "./ManufacturersList";
+import ManufacturersList from "./ManufacturersList/ManufacturersList";
 
 export const App = () => {
  <ManufacturersList></ManufacturersList>
