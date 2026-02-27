@@ -6,19 +6,25 @@ import { styled } from "styled-components";
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    padding: 20px
+    padding: 20px;
   `;
   
   export const Card = styled.div`
-  flex: 1 1 auto;
-  display: flex;
+    flex: 1 1 auto;
+    display: flex;
+    gap: 8px;
+    padding: 16px;
+    width: 600px;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: flex-start;
+`;
+
+export const BBlock = styled.div`
+display: flex;
 gap: 8px;
 padding: 16px;
-width: 600px;
-border: 1px solid rgba(0, 0, 0, 0.175);
-border-radius: 10px;
-flex-direction: column;
-justify-content: space-between;
 `;
 
 export const Button = styled.button`
@@ -35,14 +41,31 @@ color: white;
 `;
 
 export const Button2 = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #e0e7ff; /* Очень светлый синий бордюр */
+  background-color: #f8faff; /* Почти белый с синим оттенком */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
 
-padding: 4px;
-border-radius: 3px;
-background-color:#3b394f;
-color: white;
+  svg {
+    transition: stroke 0.2s ease;
+  }
+
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color:#0b5ed7;
+    /* Если это кнопка удаления (нужно передать проп $variant="delete") */
+    background-color: #eef2ff;
+    border-color: #c7d2fe;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 

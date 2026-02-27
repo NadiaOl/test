@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Button2, Card, Container, Td, Th, Th1, Th2, Wrapper, Wrapper2, Table } from './ManufacturersList.styled';
+import { Button, Button2, Card, Container, Td, Th, Th1, Th2, Wrapper, Wrapper2, Table, BBlock } from './ManufacturersList.styled';
+import { Delete } from 'img/Delete';
+import { Edit } from 'img/Edit';
+import { Add } from 'img/Add';
 
 const ManufacturersManager = () => {
   const [manufacturers, setManufacturers] = useState([]);
@@ -19,7 +22,7 @@ const ManufacturersManager = () => {
         const authRes = await fetch('https://suppliers-backend-nphe.onrender.com/api/auth/signin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: '', password: '' })
+          body: JSON.stringify({ username: 'Nadia', password: 'GjkVfh+1' })
           // TODO: add username password
         });
         const authData = await authRes.json();
@@ -97,10 +100,10 @@ const ManufacturersManager = () => {
               <h5>{m.buyer}, {m.currancy}</h5>
             </div>
                 {/* ПРИ КЛИКЕ: передаем текущий объект итерации 'm' */}
-            <div>
-              <Button onClick={() => openEditModal(m)}>Змінити</Button>
-              <Button>Видалити</Button>
-            </div>
+            <BBlock>
+              <Button2 onClick={() => openEditModal(m)} type="button"><Edit/></Button2>
+              <Button2 onClick={() => openEditModal(m)} type="button"><Delete/></Button2>
+            </BBlock>
           </Wrapper>
           <Table>
             <thead>
@@ -125,17 +128,18 @@ const ManufacturersManager = () => {
                 <Td>{product.plan ? product.plan.toLocaleString('ru-RU') : '-'}</Td>
                 <Td>{product.fact ? product.fact.toLocaleString('ru-RU') : '-'}</Td>
                 <Td>{product.fact && product.plan ? Math.ceil((product.fact*100)/product.plan) : "-"}</Td>
-                <Td>
-                  <Button2 onClick={() => openEditModal({})}>Змінити</Button2>
-                  <Button2 onClick={() => {}}>Видалити</Button2>
+                <Td style={{ "display": "flex", "gap": "8px" , "justifyСontent": "center", "padding": "6px"}}>
+                <Button2 onClick={() => openEditModal()} type="button"><Edit/></Button2>
+                <Button2 onClick={() => openEditModal()} type="button"><Delete/></Button2>
+                <Button2 onClick={() => openEditModal()} type="button"><Add/></Button2>
                 </Td>
               </tr>
             </tbody>))}
           </Table>
-          <Wrapper2>
-            <Button onClick={() => openEditModal(m)}>Додати продукт</Button>
-          </Wrapper2>
         </Card>))}
+          <Wrapper2>
+            <Button onClick={() => openEditModal()}>Додати продукт</Button>
+          </Wrapper2>
 
       {/* Модальное окно */}
       {isModalOpen && (
