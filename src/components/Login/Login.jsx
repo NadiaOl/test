@@ -16,9 +16,7 @@ export const Login = () => {
     useEffect(() => {
       if (token) navigate('/manufacturers');
     }, [token, navigate]);
-    
-    console.log('username :>> ', username);
-    console.log('password :>> ', password);
+  
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {

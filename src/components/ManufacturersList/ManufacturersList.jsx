@@ -136,7 +136,7 @@ export const ManufacturersList = () => {
               <ButtonsGroup onClick={() => deleteManufactor(m)}><Delete/></ButtonsGroup>
             </BBlock>
           </Wrapper>
-          <Table cellspacing="0" cellpadding="0" border="0">
+          <Table cellSpacing="0" cellPadding="0" border="0">
             <thead>
               <tr>
                 <Th1>Позиція</Th1>
@@ -181,7 +181,7 @@ export const ManufacturersList = () => {
 
       {isModalOpen && <Modal title={editingItem.id ? 'Редагувати' : 'Додати'} onSave={handleSave} onClose={() => setIsModalOpen(false)}>
         <Field>
-          <Label for="Постачальник">Назва</Label>
+          <Label htmlFor="Постачальник">Назва</Label>
           <Input 
             id="Постачальник"
             placeholder="Назва" 
@@ -190,7 +190,7 @@ export const ManufacturersList = () => {
           />
         </Field>
         <Field>
-          <Label for="Покупець">Покупець</Label>
+          <Label htmlFor="Покупець">Покупець</Label>
           <Input 
             id="Покупець"
             placeholder="Покупець" 
@@ -199,7 +199,7 @@ export const ManufacturersList = () => {
           />
         </Field>
         <Field>
-          <Label for="Валюта">Валюта</Label>
+          <Label htmlFor="Валюта">Валюта</Label>
           <Input 
             id="Валюта"
             placeholder="Валюта" 
@@ -213,7 +213,7 @@ export const ManufacturersList = () => {
       
         <Modal title="Продукт" onSave={handleProductSave} onClose={() => setIsProductModalOpen(false)}>
           <Field>
-            <Label for="Продукт">Назва продукту</Label>
+            <Label htmlFor="Продукт">Назва продукту</Label>
             <Input 
               id="Продукт"
               value={editingProduct.name} 
@@ -221,7 +221,7 @@ export const ManufacturersList = () => {
             />
           </Field>
           <Field>
-            <Label for="PT">PT</Label>
+            <Label htmlFor="PT">PT</Label>
             <Input 
               id="PT"
               type="number" 
@@ -230,7 +230,7 @@ export const ManufacturersList = () => {
             />
           </Field>
           <Field>
-            <Label for="PB">PB</Label>
+            <Label htmlFor="PB">PB</Label>
             <Input 
               id="PB"
               type="number" 
@@ -239,7 +239,7 @@ export const ManufacturersList = () => {
             />
           </Field>
           <Field>
-            <Label for="FOC">FOC</Label>
+            <Label htmlFor="FOC">FOC</Label>
             <Input 
               id="FOC"
               type="number" 
@@ -248,7 +248,7 @@ export const ManufacturersList = () => {
             />
           </Field>
           <Field>
-            <Label for="План">План</Label>
+            <Label htmlFor="План">План</Label>
             <Input 
               id="План" 
               type="number" 
@@ -257,7 +257,7 @@ export const ManufacturersList = () => {
             />
           </Field>
           <Field>
-            <Label for="Факт">Факт</Label>
+            <Label htmlFor="Факт">Факт</Label>
             <Input 
               id="Факт" 
               type="number" 

@@ -4,9 +4,9 @@ export const Edit = () => {
         <svg viewBox="0 0 24 24" fill="none">
         <path
           d="M4 20l4-1 9-9-3-3-9 9-1 4zM14 6l3 3"
-          stroke-width="2.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     );
