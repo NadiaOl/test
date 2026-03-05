@@ -136,7 +136,7 @@ export const ManufacturersList = () => {
               <ButtonsGroup onClick={() => deleteManufactor(m)}><Delete/></ButtonsGroup>
             </BBlock>
           </Wrapper>
-          <Table>
+          <Table cellspacing="0" cellpadding="0" border="0">
             <thead>
               <tr>
                 <Th1>Позиція</Th1>

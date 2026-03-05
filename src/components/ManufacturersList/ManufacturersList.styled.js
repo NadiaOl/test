@@ -61,7 +61,7 @@ export const Input = styled.input`
 export const BBlock = styled.div`
 display: flex;
 gap: 8px;
-padding: 8px;
+padding: 8px 18px;
 `;
 
 export const Button = styled.button`

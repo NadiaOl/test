@@ -6,7 +6,7 @@ export const Header = () => {
     const { token, logout } = useContext(AuthContext);
     return (
       <Nav>
-        {token ? 
+      {token && (
         <Container>
           <Wrapper>
             <NavLink to="/checklist">Чек-ліст</NavLink>
@@ -14,9 +14,7 @@ export const Header = () => {
           </Wrapper>
           <Button onClick={logout}>Вихід</Button>
         </Container>
-        :
-        <NavLink to="/login"></NavLink>
-        }
-      </Nav>
+      )}
+    </Nav>
     );
   };
