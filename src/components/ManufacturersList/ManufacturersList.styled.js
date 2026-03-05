@@ -1,71 +1,124 @@
 import { styled } from "styled-components";
 
-  export const Container = styled.div`
-     display: flex;
+export const Container = styled.div`
+    display: flex;
     gap: 30px;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center;
-    padding: 20px;
+    justify-content: center
   `;
   
-  export const Card = styled.div`
+export const Card = styled.div`
     flex: 1 1 auto;
     display: flex;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
     padding: 16px;
-    width: 600px;
+    max-width: 685px;
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 10px;
+    background-color: white;
     flex-direction: column;
-    justify-content: flex-start;
+    box-shadow: 0px 0px 7px rgb(55, 79, 101);
+`;
+
+export const CardDiv = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+`;
+
+export const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+`;
+
+export const Label = styled.label`
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 6px;
+`;
+
+export const Input = styled.input`
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(44, 62, 80, 0.15);
+  background: #f4f7fa;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.15s ease;
+
+  &:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.15);
+    background: #ffffff;
+  }
 `;
 
 export const BBlock = styled.div`
 display: flex;
 gap: 8px;
-padding: 16px;
+padding: 8px;
 `;
 
 export const Button = styled.button`
 width: 100px;
-border: 1px solid #05067a;
+border: none;
 padding: 8px;
 border-radius: 3px;
-background-color:#0d6efd;
+background-color:#2c3e50;
 color: white;
+cursor: pointer;
+box-shadow: 0px 2px 0 1px #1a252f;
+transition: all 0.15s ease;
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color:#0b5ed7;
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #1a252f;
+  }
+  &:active{
+    transform: translateY(6px);
+    box-shadow: 0 0 0 #1a252f;
   }
 `;
 
-export const Button2 = styled.button`
+export const ButtonsGroup = styled.button`
+width: 30px;
+  height: 30px;
+  background-color: #2c3e50;
+  border: none;
+  border-radius: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid #e0e7ff; /* Очень светлый синий бордюр */
-  background-color: #f8faff; /* Почти белый с синим оттенком */
   cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
+  padding: 0;
 
-  svg {
-    transition: stroke 0.2s ease;
-  }
+  box-shadow:1px 1px 2px #1a252f;;
+  transition: all 0.15s ease;
 
   &:hover {
-    /* Если это кнопка удаления (нужно передать проп $variant="delete") */
-    background-color: #eef2ff;
-    border-color: #c7d2fe;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #1a252f;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #1a252f;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke: #ffffff;
+    stroke-width: 2.2;
+    transition: opacity 0.15s ease;
+  }
+
+  &:hover svg {
+    opacity: 0.85;
   }
 `;
 
@@ -89,25 +142,32 @@ width: 100%;
 `;
 
 export const Th = styled.th `
-  border: 1px solid #ddd;
+  border: 1px solid #2c3e50;
   padding: 8px;
-  text-align: center;
-    `
+  text-align: center;  
+  background-color: #2c3e50;
+  color: white;
+  height: 30px;
+    `;
+
 export const Th1 = styled.th `
-  border: 1px solid #ddd;
+  border: 1px solid #2c3e50;
   padding: 8px;
   text-align: center;
-  background-color: lightgray;
+  background-color: #2c3e50;
+  color: white;
+  width: 200px;
+  height: 30px;
+  `;
 
-
-  `
 export const Th2 = styled.th `
-  border: 1px solid #ddd;
+  border: 1px solid #cdcdd0;
   padding: 8px;
   text-align: left;
-  `
+  `;
+
 export const Td = styled.td `
-  border: 1px solid #ddd;
-  /* padding: 8px; */
+  border: 1px solid #cdcdd0;
+  padding: 4px;
   text-align: center;
-`
+`;
