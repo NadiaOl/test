@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
-import { Link } from 'react-router-dom';
+import { NavLink as RouterNavLink } from "react-router-dom";
+
 
 export const Nav = styled.nav`
 background: #2c3e50; 
@@ -9,13 +10,37 @@ gap: 20px;
 color: white; 
 `;
 
-export const NavLink = styled(Link)`
-color: white; 
-text-decoration: none; 
-&:hover { 
-    text-decoration: underline; 
-    }
-    `;
+export const NavLink = styled(RouterNavLink)`
+  padding: 10px 18px;
+  width: 84px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  text-decoration: none;
+  color: #e6edf3;
+  transition: all 0.15s ease;
+
+  background: transparent;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &.active {
+    background: linear-gradient(
+      180deg,
+      #34495e 0%,
+rgb(29, 41, 52) 100%
+    );
+
+    box-shadow:
+      inset 0 2px 4px rgba(0,0,0,0.4),
+      0 2px 0 rgba(255,255,255,0.05);
+
+    color: #ffffff;
+  }
+`;
 
 export const Wrapper = styled.div`
 display: flex;
@@ -23,6 +48,7 @@ gap: 12px;
 justify-content: space-between;
 align-items: center;
 `;
+
 export const Container = styled.div`
 display: flex;
 width: 100%;
@@ -30,66 +56,37 @@ justify-content: space-between;
 align-items: center;
 `;
 export const Button = styled.button`
-width: 100px;
-  position: relative;
-  padding: 12px 20px;
-  color: #e6edf3;
-  letter-spacing: 0.5px;
-
+  padding: 10px 18px;
+  font-size: 14px;
+  width: 120px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
   background: linear-gradient(
     180deg,
-    #34495e 0%,
-    #2c3e50 50%,
-    #233140 100%
+    #3b536b 0%,
+    #2c3e50 100%
   );
-
-  border: 1px solid #1a252f;
-  border-radius: 4px;
+  color: #ffffff;
+  font-weight: 500;
   cursor: pointer;
-
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-
-  box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.15),
-    inset 0 -4px 8px rgba(0,0,0,0.4),
-    0 4px 0 #16202a;
-
   transition: all 0.15s ease;
 
-  /* верхний блик */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 8%;
-    width: 84%;
-    height: 45%;
-    background: linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.25),
-      rgba(255,255,255,0.05),
-      transparent
-    );
-    border-radius: 3px 3px 0 0;
-    pointer-events: none;
-  }
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 2px 6px rgba(0,0,0,0.25);
 
   &:hover {
-    transform: translateY(2px);
-    box-shadow:
-      inset 0 2px 4px rgba(255,255,255,0.15),
-      inset 0 -4px 8px rgba(0,0,0,0.4),
-      0 2px 0 #16202a;
+    background: linear-gradient(
+      180deg,
+      #45627e 0%,
+      #324a5f 100%
+    );
+    transform: translateY(1px);
   }
 
   &:active {
-    transform: translateY(4px);
+    transform: translateY(2px);
     box-shadow:
-      inset 0 3px 6px rgba(0,0,0,0.5),
-      0 0 0 #16202a;
-  }
-
-  &:focus {
-    outline: none;
+      inset 0 2px 4px rgba(0,0,0,0.4);
   }
 `;
