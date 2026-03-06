@@ -5,7 +5,7 @@ export const Container = styled.div`
     gap: 30px;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center
+    justify-content: center;
   `;
   
 export const Card = styled.div`
