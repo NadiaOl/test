@@ -7,19 +7,28 @@ export const Container = styled.div`
     flex-direction: row;
     justify-content: center
   `;
+
+export const ProductContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 20px;
+`;
   
 export const Card = styled.div`
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px;
-    max-width: 685px;
-    border: 1px solid rgba(0, 0, 0, 0.175);
-    border-radius: 10px;
-    background-color: white;
-    flex-direction: column;
-    box-shadow: 0px 0px 7px rgb(55, 79, 101);
+  /* flex: 1 1 auto; */
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 20px;
+  padding: 16px;
+  width: 100%;
+  /* max-width: 685px; */
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 7px rgb(55, 79, 101);
 `;
 
 export const CardDiv = styled.div`
@@ -129,11 +138,10 @@ justify-content: space-between;
 align-items: center;
 `;
 
-
 export const Wrapper2 = styled.div`
 display: flex;
 justify-content: flex-end;
-width: 100%;
+/* width: 100%; */
 align-items: center;
 `;
 

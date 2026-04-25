@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, ButtonsGroup, Card, Td, Th, Th1, Th2, Wrapper, Wrapper2, Table, BBlock, Container, CardDiv, Field, Label, Input } from './ManufacturersList.styled';
+import { Button, ButtonsGroup, Card, Td, Th, Th1, Th2, Wrapper, Wrapper2, Table, BBlock, Container, ProductContainer, CardDiv, Field, Label, Input } from './ManufacturersList.styled';
 import { Delete } from 'img/Delete';
 import { Edit } from 'img/Edit';
 import { AuthContext } from 'components/Auth/Auth';
@@ -12,6 +12,7 @@ export const ManufacturersList = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [currentManId, setCurrentManId] = useState(null);
 
   const initialState = { id: null, name: '', buyer: '', currancy: '', products: [] };
@@ -19,6 +20,9 @@ export const ManufacturersList = () => {
 
   const productInitialState = { id: null, name: '', billPrice: 0, totalPrice: 0, foc: 0, plan: 0, fact: 0 };
   const [editingProduct, setEditingProduct] = useState(productInitialState);
+
+  const contactInitialState = { id: null, fullName: '', position: '', phone: '', email: '' };
+  const [editingContact, setEditingContact] = useState(contactInitialState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,60 +123,198 @@ export const ManufacturersList = () => {
     }
   };
 
+    const handleContactSave = async () => {
+    // Валидация перед отправкой
+    if (!editingContact.fullName) {
+      alert("ПІБ контакту є обов'язковим");
+      return;
+    }
+
+    const isEdit = !!editingContact.id;
+    const url = isEdit 
+      ? `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts/${editingContact.id}`
+      : `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts`;
+    
+    try {
+      const response = await fetch(url, {
+        method: isEdit ? 'PUT' : 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingContact)
+      });
+
+      // Безопасная обработка ответа сервера
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server error raw:", errorText);
+        throw new Error(errorText.includes('Ошибка') ? "Помилка на сервері при збереженні контакту" : "Не вдалося зберегти контакт");
+      }
+
+      const savedContact = await response.json();
+      
+      setManufacturers(prev => prev.map(m => {
+        if (m._id === currentManId) {
+          if (isEdit) {
+            const updatedContacts = (m.contacts || []).map(c => c._id === editingContact.id ? savedContact : c);
+            return { ...m, contacts: updatedContacts };
+          } else {
+            return { ...m, contacts: [...(m.contacts || []), savedContact] };
+          }
+        }
+        return m;
+      }));
+      setIsContactModalOpen(false);
+    } catch (err) { 
+      alert(err.message); 
+    }
+  };
+
+  const deleteContact = async (manId, contact) => {
+    if (window.confirm(`Видалити ${contact.fullName}?`)) {
+      try {
+        await fetch(`https://suppliers-backend-nphe.onrender.com/api/manufacturers/${manId}/contacts/${contact._id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        setManufacturers(prev => prev.map(m => {
+          if (m._id === manId) {
+            return { ...m, contacts: (m.contacts || []).filter(c => c._id !== contact._id) };
+          }
+          return m;
+        }));
+      } catch (err) { console.error(err); }
+    }
+  };
+  const openContactModal = (manufacturerId, contact = null) => {
+    setCurrentManId(manufacturerId);
+    if (contact) {
+      setEditingContact({ id: contact._id, fullName: contact.fullName, position: contact.position, phone: contact.phone, email: contact.email});
+    } else {
+      setEditingContact(contactInitialState);
+    }
+    setIsContactModalOpen(true);
+  };
+ 
+  // const handleContactSave =async () => {
+  //   const isEdit = !!editingContact.id;
+  //   const url = isEdit 
+  //     ? `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts/${editingContact.id}`
+  //     : `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts`;
+    
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: isEdit ? 'PUT' : 'POST',
+  //       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(editingContact)
+  //     });
+  //     const updatedMan = await response.json();
+  //     setManufacturers(prev => prev.map(m => m._id === currentManId ? updatedMan : m));
+  //     setIsContactModalOpen(false);
+  //   } catch (err) { alert(err.message); }
+  // };
+  
+  // // TODO:
+
+
+
+  // const deleteContact = async (manId, contact) => {
+  //   if (window.confirm(`Видалити ${contact.fullName}?`)) {
+  //     const res = await fetch(`https://suppliers-backend-nphe.onrender.com/api/manufacturers/${manId}/contacts/${contact._id}`, {
+  //       method: 'DELETE',
+  //       headers: { 'Authorization': `Bearer ${token}` }
+  //     });
+  //     const updatedData = await res.json();
+  //     setManufacturers(prev => prev.map(m => m._id === manId ? { ...m, contacts: updatedData.contacts || updatedData } : m));
+  //   }
+  // };
+  // // TODO:
+  
   if (loading) return <p>Завантаження...</p>;
 
   return (
     <Container>
       {manufacturers.map((m) => (
         <Card key={m._id}>
-          <CardDiv>
-          <Wrapper>
-            <div>
-              <h3>{m.name}</h3>
-              <h5>{m.buyer}, {m.currancy}</h5>
-            </div>
-            <BBlock>
-              <ButtonsGroup onClick={() => openEditModal(m)}><Edit/></ButtonsGroup>
-              <ButtonsGroup onClick={() => deleteManufactor(m)}><Delete/></ButtonsGroup>
-            </BBlock>
-          </Wrapper>
-          <Table cellSpacing="0" cellPadding="0" border="0">
-            <thead>
-              <tr>
-                <Th1>Позиція</Th1>
-                  <Th>PT</Th>
-                  <Th>PB</Th>
-                  <Th>FOC</Th>
-                  <Th>План</Th>
-                  <Th>Факт</Th>
-                  <Th>%%</Th><Th>Дії</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {m.products?.map((p) => (
-                <tr key={p._id}>
-                  <Th2>{p.name}</Th2>
-                  <Td>{p.totalPrice}</Td>
-                  <Td>{p.billPrice}</Td>
-                  <Td>{p.foc}</Td>
-                  <Td>{p.plan?.toLocaleString()}</Td>
-                  <Td>{p.fact?.toLocaleString()}</Td>
-                  <Td>{p.fact && p.plan ? Math.ceil((p.fact*100)/p.plan) : "-"}</Td>
-                  <Td>
-                      <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openProductModal(m._id, p)}><Edit/></ButtonsGroup>
-                      <ButtonsGroup style={{marginLeft: '4px'}}onClick={() => deleteProduct(m._id, p)}><Delete/></ButtonsGroup>
-
-                  </Td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          </CardDiv>
-          <Wrapper2>
-
-          <Button onClick={() => openProductModal(m._id)}>Додати продукт</Button>
-          </Wrapper2>
+          <ProductContainer>
+            <CardDiv>
+              <Wrapper>
+                <div>
+                  <h3>{m.name}</h3>
+                  <h5>{m.buyer}, {m.currancy}</h5>
+                </div>
+                <BBlock>
+                  <ButtonsGroup onClick={() => openEditModal(m)}><Edit/></ButtonsGroup>
+                  <ButtonsGroup onClick={() => deleteManufactor(m)}><Delete/></ButtonsGroup>
+                </BBlock>
+              </Wrapper>
+              <Table cellSpacing="0" cellPadding="0" border="0">
+                <thead>
+                  <tr>
+                    <Th1>Позиція</Th1>
+                      <Th>PT</Th>
+                      <Th>PB</Th>
+                      <Th>FOC</Th>
+                      <Th>План</Th>
+                      <Th>Факт</Th>
+                      <Th>%%</Th><Th>Дії</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {m.products?.map((p) => (
+                    <tr key={p._id}>
+                      <Th2>{p.name}</Th2>
+                      <Td>{p.totalPrice}</Td>
+                      <Td>{p.billPrice}</Td>
+                      <Td>{p.foc}</Td>
+                      <Td>{p.plan?.toLocaleString()}</Td>
+                      <Td>{p.fact?.toLocaleString()}</Td>
+                      <Td>{p.fact && p.plan ? Math.ceil((p.fact*100)/p.plan) : "-"}</Td>
+                      <Td>
+                          <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openProductModal(m._id, p)}><Edit/></ButtonsGroup>
+                          <ButtonsGroup style={{marginLeft: '4px'}}onClick={() => deleteProduct(m._id, p)}><Delete/></ButtonsGroup>
+                      </Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </CardDiv>
+            <Wrapper2>
+              <Button onClick={() => openProductModal(m._id)}>Додати продукт</Button>
+            </Wrapper2>
+          </ProductContainer>
+          <ProductContainer>
+              <h3>Контакти {m.name}</h3>
+              <Table cellSpacing="0" cellPadding="0" border="0">
+                <thead>
+                  <tr>
+                    <Th1 style={{width: '150px'}}>ПІБ</Th1>
+                    <Th style={{width: '75px'}}>Посада</Th>
+                    <Th>Телефон</Th>
+                    <Th>email</Th>
+                    <Th>Дії</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {m.contacts?.map((c) => (
+                    <tr key={c._id}>
+                      <Th2>{c.fullName}</Th2>
+                      <Td>{c.position}</Td>
+                      <Td>{c.phone}</Td>
+                      <Td>{c.email}</Td>
+                      <Td>
+                          <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openContactModal(m._id, c)}><Edit/></ButtonsGroup>
+                          <ButtonsGroup style={{marginLeft: '4px'}}onClick={() => deleteContact(m._id, c)}><Delete/></ButtonsGroup>
+                      </Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Wrapper2>
+                <Button onClick={() => openContactModal(m._id)}>Додати контакт</Button>
+              </Wrapper2>
+          </ProductContainer>
         </Card>
+        
       ))}
       <Wrapper2>
         <Button onClick={() => openEditModal()}>Додати виробника</Button>
@@ -208,10 +350,7 @@ export const ManufacturersList = () => {
           />
         </Field>
         </Modal>}
-
-      {isProductModalOpen && 
-      
-        <Modal title="Продукт" onSave={handleProductSave} onClose={() => setIsProductModalOpen(false)}>
+      {isProductModalOpen && <Modal title="Продукт" onSave={handleProductSave} onClose={() => setIsProductModalOpen(false)}>
           <Field>
             <Label htmlFor="Продукт">Назва продукту</Label>
             <Input 
@@ -265,8 +404,41 @@ export const ManufacturersList = () => {
               onChange={e => setEditingProduct({...editingProduct, fact: e.target.value})}  
             />
           </Field>
-        </Modal>
-        }
+      </Modal>}
+      {isContactModalOpen && <Modal title="Контакти" onSave={handleContactSave} onClose={() => setIsContactModalOpen(false)}>
+          <Field>
+            <Label htmlFor="Контакти">ПІБ контакту</Label>
+            <Input 
+              id="Контакти"
+              value={editingContact.fullName} 
+              onChange={e => setEditingContact({...editingContact, fullName: e.target.value})}  
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="Посада">Посада</Label>
+            <Input 
+              id="Посада"
+              value={editingContact.position} 
+              onChange={e => setEditingContact({...editingContact, position: e.target.value})}  
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="Телефон">Телефон</Label>
+            <Input 
+              id="Телефон"
+              value={editingContact.phone} 
+              onChange={e => setEditingContact({...editingContact, phone: e.target.value})}  
+            />
+          </Field>
+          <Field>
+            <Label htmlFor="Email">Email</Label>
+            <Input 
+              id="Email"
+              value={editingContact.email} 
+              onChange={e => setEditingContact({...editingContact, email: e.target.value})}  
+            />
+          </Field>
+        </Modal>        }
     </Container>
   );
 };
