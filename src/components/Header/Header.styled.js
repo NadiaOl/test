@@ -3,12 +3,13 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 
 
 export const Nav = styled.nav`
-background: #2c3e50; 
-height: 40px;
-padding: 1rem; 
-display: flex; 
-gap: 20px; 
-color: white; 
+  position: fixed;
+  width: 100%;
+  background: #2c3e50;
+  height: 74px;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-bottom: 2px solid white;
 `;
 
 export const NavLink = styled(RouterNavLink)`
