@@ -7,7 +7,7 @@ import { Login } from 'components/Login/Login';
 import { CheckList } from 'components/CheckList/Checlist';
 
 export const  App = () =>{
-  const basename = window.location.pathname.startsWith('/test') ? '/test' : '';
+  // const basename = window.location.pathname.startsWith('/test') ? '/test' : '';
     return (
       <AuthProvider>
         <BrowserRouter basename={basename}>
