@@ -2,17 +2,21 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Button, ButtonsGroup, Card, Td, Th, Th1, Th2, Wrapper, Wrapper2, Table, BBlock, Container, ProductContainer, CardDiv, Field, Label, Input } from './ManufacturersList.styled';
 import { Delete } from 'img/Delete';
 import { Edit } from 'img/Edit';
+import { Contacts } from 'img/Contact';
 import { AuthContext } from 'components/Auth/Auth';
 import { Modal } from 'components/Modal/Modal';
-
 
 export const ManufacturersList = () => {
   const { token } = useContext(AuthContext);
   const [manufacturers, setManufacturers] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  // Состояния для модалок
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isContactListModalOpen, setIsContactListModalOpen] = useState(false); // Список контактов
+  const [isContactEditModalOpen, setIsContactEditModalOpen] = useState(false); // Форма создания/редактирования
+  
   const [currentManId, setCurrentManId] = useState(null);
 
   const initialState = { id: null, name: '', buyer: '', currancy: '', products: [] };
@@ -42,6 +46,7 @@ export const ManufacturersList = () => {
     if (token) fetchData();
   }, [token]);
 
+  // --- Логика Производителей ---
   const openEditModal = (manufacturer = null) => {
     if (manufacturer) {
       setEditingItem({ id: manufacturer._id, name: manufacturer.name, buyer: manufacturer.buyer, currancy: manufacturer.currancy });
@@ -84,6 +89,7 @@ export const ManufacturersList = () => {
     }
   };
 
+  // --- Логика Продуктов ---
   const openProductModal = (manufacturerId, product = null) => {
     setCurrentManId(manufacturerId);
     if (product) {
@@ -123,13 +129,26 @@ export const ManufacturersList = () => {
     }
   };
 
-    const handleContactSave = async () => {
-    // Валидация перед отправкой
+  // --- Логика Контактов ---
+  const openContactList = (manufacturer) => {
+    setCurrentManId(manufacturer._id);
+    setIsContactListModalOpen(true);
+  };
+
+  const openContactEditModal = (contact = null) => {
+    if (contact) {
+      setEditingContact({ id: contact._id, fullName: contact.fullName, position: contact.position, phone: contact.phone, email: contact.email });
+    } else {
+      setEditingContact(contactInitialState);
+    }
+    setIsContactEditModalOpen(true);
+  };
+
+  const handleContactSave = async () => {
     if (!editingContact.fullName) {
       alert("ПІБ контакту є обов'язковим");
       return;
     }
-
     const isEdit = !!editingContact.id;
     const url = isEdit 
       ? `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts/${editingContact.id}`
@@ -142,11 +161,8 @@ export const ManufacturersList = () => {
         body: JSON.stringify(editingContact)
       });
 
-      // Безопасная обработка ответа сервера
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error raw:", errorText);
-        throw new Error(errorText.includes('Ошибка') ? "Помилка на сервері при збереженні контакту" : "Не вдалося зберегти контакт");
+        throw new Error("Не вдалося зберегти контакт");
       }
 
       const savedContact = await response.json();
@@ -162,10 +178,8 @@ export const ManufacturersList = () => {
         }
         return m;
       }));
-      setIsContactModalOpen(false);
-    } catch (err) { 
-      alert(err.message); 
-    }
+      setIsContactEditModalOpen(false);
+    } catch (err) { alert(err.message); }
   };
 
   const deleteContact = async (manId, contact) => {
@@ -175,7 +189,6 @@ export const ManufacturersList = () => {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        
         setManufacturers(prev => prev.map(m => {
           if (m._id === manId) {
             return { ...m, contacts: (m.contacts || []).filter(c => c._id !== contact._id) };
@@ -185,54 +198,14 @@ export const ManufacturersList = () => {
       } catch (err) { console.error(err); }
     }
   };
-  const openContactModal = (manufacturerId, contact = null) => {
-    setCurrentManId(manufacturerId);
-    if (contact) {
-      setEditingContact({ id: contact._id, fullName: contact.fullName, position: contact.position, phone: contact.phone, email: contact.email});
-    } else {
-      setEditingContact(contactInitialState);
-    }
-    setIsContactModalOpen(true);
-  };
- 
-  // const handleContactSave =async () => {
-  //   const isEdit = !!editingContact.id;
-  //   const url = isEdit 
-  //     ? `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts/${editingContact.id}`
-  //     : `https://suppliers-backend-nphe.onrender.com/api/manufacturers/${currentManId}/contacts`;
-    
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: isEdit ? 'PUT' : 'POST',
-  //       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(editingContact)
-  //     });
-  //     const updatedMan = await response.json();
-  //     setManufacturers(prev => prev.map(m => m._id === currentManId ? updatedMan : m));
-  //     setIsContactModalOpen(false);
-  //   } catch (err) { alert(err.message); }
-  // };
-  
-  // // TODO:
 
-
-
-  // const deleteContact = async (manId, contact) => {
-  //   if (window.confirm(`Видалити ${contact.fullName}?`)) {
-  //     const res = await fetch(`https://suppliers-backend-nphe.onrender.com/api/manufacturers/${manId}/contacts/${contact._id}`, {
-  //       method: 'DELETE',
-  //       headers: { 'Authorization': `Bearer ${token}` }
-  //     });
-  //     const updatedData = await res.json();
-  //     setManufacturers(prev => prev.map(m => m._id === manId ? { ...m, contacts: updatedData.contacts || updatedData } : m));
-  //   }
-  // };
-  // // TODO:
-  
   if (loading) return <p>Завантаження...</p>;
+
+  const currentManufacturer = manufacturers.find(m => m._id === currentManId);
 
   return (
     <Container>
+
       {manufacturers.map((m) => (
         <Card key={m._id}>
           <ProductContainer>
@@ -243,6 +216,7 @@ export const ManufacturersList = () => {
                   <h5>{m.buyer}, {m.currancy}</h5>
                 </div>
                 <BBlock>
+                  <ButtonsGroup onClick={() => openContactList(m)}><Contacts/></ButtonsGroup>
                   <ButtonsGroup onClick={() => openEditModal(m)}><Edit/></ButtonsGroup>
                   <ButtonsGroup onClick={() => deleteManufactor(m)}><Delete/></ButtonsGroup>
                 </BBlock>
@@ -251,12 +225,12 @@ export const ManufacturersList = () => {
                 <thead>
                   <tr>
                     <Th1>Позиція</Th1>
-                      <Th>PT</Th>
-                      <Th>PB</Th>
-                      <Th>FOC</Th>
-                      <Th>План</Th>
-                      <Th>Факт</Th>
-                      <Th>%%</Th><Th>Дії</Th>
+                    <Th>PT</Th>
+                    <Th>PB</Th>
+                    <Th>FOC</Th>
+                    <Th>План</Th>
+                    <Th>Факт</Th>
+                    <Th>%%</Th><Th>Дії</Th>
                   </tr>
                 </thead>
                 <tbody>
@@ -270,8 +244,8 @@ export const ManufacturersList = () => {
                       <Td>{p.fact?.toLocaleString()}</Td>
                       <Td>{p.fact && p.plan ? Math.ceil((p.fact*100)/p.plan) : "-"}</Td>
                       <Td>
-                          <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openProductModal(m._id, p)}><Edit/></ButtonsGroup>
-                          <ButtonsGroup style={{marginLeft: '4px'}}onClick={() => deleteProduct(m._id, p)}><Delete/></ButtonsGroup>
+                        <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openProductModal(m._id, p)}><Edit/></ButtonsGroup>
+                        <ButtonsGroup style={{marginLeft: '4px'}} onClick={() => deleteProduct(m._id, p)}><Delete/></ButtonsGroup>
                       </Td>
                     </tr>
                   ))}
@@ -282,163 +256,141 @@ export const ManufacturersList = () => {
               <Button onClick={() => openProductModal(m._id)}>Додати продукт</Button>
             </Wrapper2>
           </ProductContainer>
-          <ProductContainer>
-              <h3>Контакти {m.name}</h3>
-              <Table cellSpacing="0" cellPadding="0" border="0">
-                <thead>
-                  <tr>
-                    <Th1 style={{width: '150px'}}>ПІБ</Th1>
-                    <Th style={{width: '75px'}}>Посада</Th>
-                    <Th>Телефон</Th>
-                    <Th>email</Th>
-                    <Th>Дії</Th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {m.contacts?.map((c) => (
-                    <tr key={c._id}>
-                      <Th2>{c.fullName}</Th2>
-                      <Td>{c.position}</Td>
-                      <Td>{c.phone}</Td>
-                      <Td>{c.email}</Td>
-                      <Td>
-                          <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openContactModal(m._id, c)}><Edit/></ButtonsGroup>
-                          <ButtonsGroup style={{marginLeft: '4px'}}onClick={() => deleteContact(m._id, c)}><Delete/></ButtonsGroup>
-                      </Td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <Wrapper2>
-                <Button onClick={() => openContactModal(m._id)}>Додати контакт</Button>
-              </Wrapper2>
-          </ProductContainer>
         </Card>
-        
       ))}
-      <Wrapper2>
-        <Button onClick={() => openEditModal()}>Додати виробника</Button>
-      </Wrapper2>
+              
+      <div>
+        <Button style={{width: '400px', height: '40px'}}onClick={() => openEditModal()}>Додати виробника</Button>
+      </div>
 
+      {/*  МОДАЛКА: Список контактов  */}
+      {isContactListModalOpen && currentManufacturer && (
+        <Modal 
+          title={`Контакти ${currentManufacturer.name}`} 
+          onClose={() => setIsContactListModalOpen(false)}
+          onSave={() => setIsContactListModalOpen(false)}
+        >
+          <Table cellSpacing="0" cellPadding="0" border="0">
+            <thead>
+              <tr>
+                <Th1 style={{width: '150px'}}>ПІБ</Th1>
+                <Th style={{width: '75px'}}>Посада</Th>
+                <Th>Телефон</Th>
+                <Th>email</Th>
+                <Th>Дії</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentManufacturer.contacts?.map((c) => (
+                <tr key={c._id}>
+                  <Th2>{c.fullName}</Th2>
+                  <Td>{c.position}</Td>
+                  <Td>{c.phone}</Td>
+                  <Td>{c.email}</Td>
+                  <Td>
+                    <ButtonsGroup style={{marginRight: '4px'}} onClick={() => openContactEditModal(c)}><Edit/></ButtonsGroup>
+                    <ButtonsGroup style={{marginLeft: '4px'}} onClick={() => deleteContact(currentManId, c)}><Delete/></ButtonsGroup>
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Wrapper2>
+            <Button onClick={() => openContactEditModal()}>Додати контакт</Button>
+          </Wrapper2>
+        </Modal>
+      )}
 
-      {isModalOpen && <Modal title={editingItem.id ? 'Редагувати' : 'Додати'} onSave={handleSave} onClose={() => setIsModalOpen(false)}>
-        <Field>
-          <Label htmlFor="Постачальник">Назва</Label>
-          <Input 
-            id="Постачальник"
-            placeholder="Назва" 
-            value={editingItem.name} 
-            onChange={e => setEditingItem({...editingItem, name: e.target.value})}  
-          />
-        </Field>
-        <Field>
-          <Label htmlFor="Покупець">Покупець</Label>
-          <Input 
-            id="Покупець"
-            placeholder="Покупець" 
-            value={editingItem.buyer} 
-            onChange={e => setEditingItem({...editingItem, buyer: e.target.value})} 
-          />
-        </Field>
-        <Field>
-          <Label htmlFor="Валюта">Валюта</Label>
-          <Input 
-            id="Валюта"
-            placeholder="Валюта" 
-            value={editingItem.currancy} 
-            onChange={e => setEditingItem({...editingItem, currancy: e.target.value})} 
-          />
-        </Field>
-        </Modal>}
-      {isProductModalOpen && <Modal title="Продукт" onSave={handleProductSave} onClose={() => setIsProductModalOpen(false)}>
+      {/*  МОДАЛКА: Создание/Редактирование контакта  */}
+      {isContactEditModalOpen && (
+        <Modal 
+          title={editingContact.id ? "Редагувати контакт" : "Додати контакт"} 
+          onSave={handleContactSave} 
+          onClose={() => setIsContactEditModalOpen(false)}
+        >
           <Field>
-            <Label htmlFor="Продукт">Назва продукту</Label>
+            <Label htmlFor="fullName">ПІБ контакту</Label>
             <Input 
-              id="Продукт"
-              value={editingProduct.name} 
-              onChange={e => setEditingProduct({...editingProduct, name: e.target.value})}  
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="PT">PT</Label>
-            <Input 
-              id="PT"
-              type="number" 
-              value={editingProduct.totalPrice} 
-              onChange={e => setEditingProduct({...editingProduct, totalPrice: e.target.value})}  
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="PB">PB</Label>
-            <Input 
-              id="PB"
-              type="number" 
-              value={editingProduct.billPrice} 
-              onChange={e => setEditingProduct({...editingProduct, billPrice: e.target.value})}  
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="FOC">FOC</Label>
-            <Input 
-              id="FOC"
-              type="number" 
-              value={editingProduct.foc} 
-              onChange={e => setEditingProduct({...editingProduct, foc: e.target.value})}  
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="План">План</Label>
-            <Input 
-              id="План" 
-              type="number" 
-              value={editingProduct.plan} 
-              onChange={e => setEditingProduct({...editingProduct, plan: e.target.value})}  
-            />
-          </Field>
-          <Field>
-            <Label htmlFor="Факт">Факт</Label>
-            <Input 
-              id="Факт" 
-              type="number" 
-              value={editingProduct.fact} 
-              onChange={e => setEditingProduct({...editingProduct, fact: e.target.value})}  
-            />
-          </Field>
-      </Modal>}
-      {isContactModalOpen && <Modal title="Контакти" onSave={handleContactSave} onClose={() => setIsContactModalOpen(false)}>
-          <Field>
-            <Label htmlFor="Контакти">ПІБ контакту</Label>
-            <Input 
-              id="Контакти"
+              id="fullName"
               value={editingContact.fullName} 
-              onChange={e => setEditingContact({...editingContact, fullName: e.target.value})}  
+              onChange={e => setEditingContact({...editingContact, fullName: e.target.value})}   
             />
           </Field>
           <Field>
-            <Label htmlFor="Посада">Посада</Label>
+            <Label htmlFor="pos">Посада</Label>
             <Input 
-              id="Посада"
+              id="pos"
               value={editingContact.position} 
-              onChange={e => setEditingContact({...editingContact, position: e.target.value})}  
+              onChange={e => setEditingContact({...editingContact, position: e.target.value})}   
             />
           </Field>
           <Field>
-            <Label htmlFor="Телефон">Телефон</Label>
+            <Label htmlFor="tel">Телефон</Label>
             <Input 
-              id="Телефон"
+              id="tel"
               value={editingContact.phone} 
-              onChange={e => setEditingContact({...editingContact, phone: e.target.value})}  
+              onChange={e => setEditingContact({...editingContact, phone: e.target.value})}   
             />
           </Field>
           <Field>
-            <Label htmlFor="Email">Email</Label>
+            <Label htmlFor="mail">Email</Label>
             <Input 
-              id="Email"
+              id="mail"
               value={editingContact.email} 
-              onChange={e => setEditingContact({...editingContact, email: e.target.value})}  
+              onChange={e => setEditingContact({...editingContact, email: e.target.value})}   
             />
           </Field>
-        </Modal>        }
+        </Modal>
+      )}
+
+      {/*  МОДАЛКА: Создание/Редактирование производителя  */}
+      {isModalOpen && (
+        <Modal title={editingItem.id ? 'Редагувати' : 'Додати'} onSave={handleSave} onClose={() => setIsModalOpen(false)}>
+          <Field>
+            <Label htmlFor="name">Назва</Label>
+            <Input id="name" value={editingItem.name} onChange={e => setEditingItem({...editingItem, name: e.target.value})} />
+          </Field>
+          <Field>
+            <Label htmlFor="buyer">Покупець</Label>
+            <Input id="buyer" value={editingItem.buyer} onChange={e => setEditingItem({...editingItem, buyer: e.target.value})} />
+          </Field>
+          <Field>
+            <Label htmlFor="curr">Валюта</Label>
+            <Input id="curr" value={editingItem.currancy} onChange={e => setEditingItem({...editingItem, currancy: e.target.value})} />
+          </Field>
+        </Modal>
+      )}
+
+      {/*  МОДАЛКА: Создание/Редактирование продукта */}
+      {isProductModalOpen && (
+        <Modal title="Продукт" onSave={handleProductSave} onClose={() => setIsProductModalOpen(false)}>
+          <Field>
+            <Label>Назва продукту</Label>
+            <Input value={editingProduct.name} onChange={e => setEditingProduct({...editingProduct, name: e.target.value})} />
+          </Field>
+          <Field>
+            <Label>PT</Label>
+            <Input type="number" value={editingProduct.totalPrice} onChange={e => setEditingProduct({...editingProduct, totalPrice: e.target.value})} />
+          </Field>
+          <Field>
+            <Label>PB</Label>
+            <Input type="number" value={editingProduct.billPrice} onChange={e => setEditingProduct({...editingProduct, billPrice: e.target.value})} />
+          </Field>
+          <Field>
+            <Label>FOC</Label>
+            <Input type="number" value={editingProduct.foc} onChange={e => setEditingProduct({...editingProduct, foc: e.target.value})} />
+          </Field>
+          <Field>
+            <Label>План</Label>
+            <Input type="number" value={editingProduct.plan} onChange={e => setEditingProduct({...editingProduct, plan: e.target.value})} />
+          </Field>
+          <Field>
+            <Label>Факт</Label>
+            <Input type="number" value={editingProduct.fact} onChange={e => setEditingProduct({...editingProduct, fact: e.target.value})} />
+          </Field>
+        </Modal>
+      )}
     </Container>
   );
 };
+

@@ -8,28 +8,25 @@ export const Container = styled.div`
     justify-content: center;
   `;
 
+export const Card = styled.div`
+    flex: 0 1 auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 16px;
+    width: 670px;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0px 0px 7px rgb(55, 79, 101);
+`;
 export const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
   gap: 20px;
 `;
   
-export const Card = styled.div`
-  /* flex: 1 1 auto; */
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  flex-direction: row;
-  gap: 20px;
-  padding: 16px;
-  width: 100%;
-  /* max-width: 685px; */
-  border: 1px solid rgba(0, 0, 0, 0.175);
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0px 0px 7px rgb(55, 79, 101);
-`;
 
 export const CardDiv = styled.div`
 display: flex;
@@ -74,7 +71,7 @@ padding: 8px 18px;
 `;
 
 export const Button = styled.button`
-width: 100px;
+width: 100%;
 border: none;
 padding: 8px;
 border-radius: 3px;
@@ -172,10 +169,12 @@ export const Th2 = styled.th `
   border: 1px solid #cdcdd0;
   padding: 8px;
   text-align: left;
+  font-size: 14px;
   `;
 
 export const Td = styled.td `
   border: 1px solid #cdcdd0;
   padding: 4px;
   text-align: center;
+  font-size: 14px;
 `;

@@ -45,23 +45,27 @@ export const Container = styled.div`
   inset: 0;
   background: rgba(44, 62, 80, 0.25);
   backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  padding: 40px 16px;
 `;
 
 export const Content = styled.div`
-
-width: 420px;
-  max-width: 90%;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 
-    0 20px 60px rgba(44, 62, 80, 0.15),
-    0 8px 20px rgba(44, 62, 80, 0.08);
+    width: 720px;
+    display: flex;
+    gap: 20px;
+    max-width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 20px 60px rgba(44, 62, 80, 0.15), 0 8px 20px rgba(44, 62, 80, 0.08);
+    margin-bottom: 40px;
+    position: relative;
+    flex-direction: column;
 `;
-
 
