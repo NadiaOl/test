@@ -37,7 +37,6 @@ justify-content: space-around;
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 18px;
 `;
 
 export const Label = styled.label`

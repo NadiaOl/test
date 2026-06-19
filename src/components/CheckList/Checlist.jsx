@@ -1,9 +1,10 @@
 
 import { useState } from "react";
-import { Edit } from "img/Edit"
-import { Container, SearchContainer, SearchBlock, Input, Button, Modal, 
-Card, Table, Th1, Th2, Th, Td, ButtonsGroup, PaymentDiv, EditBtnBlock, TaskText, Textarea, OrderWrapper, CheckListWrapper } from "./CheckList.styled"
+import { Edit } from "img/Edit";
+import { Container, SearchContainer, SearchBlock, Input, Button, Field, Field2, Product, Wrapper,
+Card, Table, Th1, Th2, Th, Td, ButtonsGroup, PaymentDiv, EditBtnBlock, TaskText, Coment, OrderWrapper, CheckListWrapper, Label, Form, Checkbox } from "./CheckList.styled"
 import { Delete } from "img/Delete"
+import { Modal } from "components/Modal/Modal"
 
 export const CheckList = () => {
 
@@ -99,6 +100,7 @@ export const CheckList = () => {
                         <option value="303 Pharma" />
                         <option value="LeaseMedica" />
                         <option value="Regenbogen" />
+                        <option value="TechNature" />
                     </datalist>
                 </SearchBlock>   
                 <Button>Додати замовлення
@@ -108,6 +110,15 @@ export const CheckList = () => {
                 <OrderWrapper>
                     <h3>BR Pharm</h3>
                     <h5>Apriori Pharm/ Company Emet, USD</h5>
+                    <Form>
+                        <Label htmlFor="date">Очікувана дата надходження</Label>
+                        <Input 
+                            type="date" 
+                            id="date"
+                            // value={()=>{}} 
+                            // onChange={()=>{}}   
+                        />
+                    </Form>
                     <Table cellSpacing="0" cellPadding="0" border="0">
                         <thead>
                             <tr>
@@ -190,14 +201,16 @@ export const CheckList = () => {
                         <Button>Додати коментар</Button>
                         </EditBtnBlock>
                     </PaymentDiv>
-                    <Textarea placeholder="Коментар"></Textarea>
+                    <h5>Коментар</h5>
+                    <Coment>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet architecto ducimus dolore eos dicta consequatur optio repellat beatae minus, odit earum porro repellendus nostrum quaerat quo enim ex possimus aliquid.</Coment>
                 </OrderWrapper>
                 <CheckListWrapper>
                     <h4>Чек-лист</h4>
                     {tasks.map((task) => (
                     <label key={task.id}>
-                        <input
+                        <Checkbox
                             type="checkbox"
+                            style={{accentСolor: "#2c3e50", marginRight: "10px"}}
                             checked={task.completed}
                             onChange={() => toggleTask(task.id)}
                         />
@@ -207,56 +220,237 @@ export const CheckList = () => {
                     </label>
                     ))}
                 </CheckListWrapper>
-
-
+                <ButtonsGroup>
+                    <Delete/>
+                </ButtonsGroup>
             </Card>
-            <Modal>
-                <div>
-                    <label htmlFor="manufactor">Виробник:</label>
-                    <input
-                        list="manufactors"
-                        id="manufactor"
-                        name="manufactors" />
-                    <datalist id="manufactors">
-                        <option value="BR Pharm"/>
-                        <option value="Sinclair"/>
-                        <option value="Medytox"/>
-                        <option value="Swedish Nutra"/>
-                        <option value="Naveh" />
-                        <option value="303 Pharma" />
-                        <option value="LeaseMedica" />
-                        <option value="Regenbogen" />
-                    </datalist>
-                </div>  
-                <div>
-                    рендер продуктов
-                    <ul>
-                        <li>
-                                <p> название 1</p>
-                                <input
-                                    type="number"
-                                placeholder='количество без FOC'
-                            />
-                        </li>
-                        <li>
-                            <p> название 2</p>
-                            <input
-                                type="number"
-                                placeholder='количество без FOC'
-                            />
-                        </li>
-                        <li>
-                            <p> название 3</p>
-                            <input
-                                type="number"
-                                placeholder='количество без FOC'
-                                />
-                        </li>
-                    </ul>
-                <button>Сохранить заказ</button>
-                </div>
-            </Modal>
 
+            {/* 1) Модалка Додати замовлення */}
+            {/* <Modal 
+                title={`Додати замовлення`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Field>
+                    <label htmlFor="producer">Оберіть виробника:</label>
+                    <Input list="producers" id="producer" name="producers"/>
+                {/* map по виробнику */}
+
+                {/* <datalist id="producers">
+                        <option value={()=>{}}/>
+                    </datalist>
+                </Field> */}
+                {/* <Table>
+                    <thead>
+                        <tr>
+                            <Th1>Продукт</Th1>
+                            <Th>Кількість, без FOC</Th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <Th2>Vitaran i</Th2>
+                            <Td>5000</Td>
+                        </tr>
+                        <tr>
+                            <Th2>Vitaran i II</Th2>
+                            <Td>3000</Td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <Field>
+                    <Label htmlFor="date">Дата надходження</Label>
+                    <Input 
+                        id="date"
+                        type="month"
+                        value={()=>{}} 
+                        onChange={() => {}}   
+                    />
+                </Field>
+                <Field>
+                    <Label htmlFor="comment">Коментар</Label>
+                    <Input 
+                        id="comment"
+                        value={()=>{}} 
+                        onChange={() => {}}   
+                    />
+                </Field>
+            </Modal> */}
+
+            {/* 2) Модалка Змінити замовлення */}
+            {/* <Modal 
+                title={`Змінити замовлення`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Product>Azulen Serum</Product>
+                <Field2>
+                    <Label>PT:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>PB:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Кількість, без FOC:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Кількість, FOC:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Сума:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Invoice 1:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Invoice 2:</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+            </Modal> */}
+
+            {/* 3) Модалка Додати продукт */}
+            {/* <Modal 
+                title={`Додати продукт`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Field>
+                    <label htmlFor="product">Оберіть продукт:</label>
+                    <Input list="products" id="product" name="product"/> */}
+                {/* map по виробнику */}
+                {/* <datalist id="products">
+                        <option value={()=>{}}/>
+                    </datalist>
+                </Field> 
+                <Field2>
+                <Label htmlFor="quantity">Кількість, без FOC:</Label>
+                    <Input 
+                        id="quantity"
+                        value={()=>{}} 
+                        onChange={() => {}}   
+                    />
+                </Field2>
+            </Modal> */}
+
+
+            {/* 4) Модалка Додати/змінити коментар */}
+            {/* <Modal 
+                title={`Додати/змінити коментар`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Field>
+                    <textarea 
+                        name="comment" 
+                        rows="5" 
+                        cols="33"
+                        // value={()=>{}}
+                        // onChange={()=>{}}
+                    >
+                    </textarea>
+                </Field>
+            </Modal> */}
+
+            {/* 5) Модалка Додати/змінити дату надходження */}
+            {/* <Modal 
+                title={`Додати/змінити дату надходження`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Field>
+                    <Label htmlFor="date">Дата надходження</Label>
+                    <Input 
+                        id="date"
+                        type="month"
+                        value={()=>{}} 
+                        onChange={() => {}}   
+                    />
+                </Field>
+            </Modal> */}
+
+            {/* 6) Модалка Додати оплату */}
+            {/* <Modal 
+                title={`Додати оплату`} 
+                onClose={() => {}}
+                onSave={() => {}}
+            >
+                <Field2 style={{height: "14px"}}>
+                    <Wrapper>
+                        <Label htmlFor="Inv1">Invoice 1</Label>
+                        <Input 
+                            id="Inv1"
+                            type="radio"
+                            value={()=>{}} 
+                            onChange={() => {}}   
+                        />
+                    </Wrapper>
+                    <Wrapper>
+                        <Label htmlFor="Inv2">Invoice 2</Label>
+                        <Input 
+                            id="Inv2"
+                            type="radio"
+                            value={()=>{}} 
+                            onChange={() => {}}   
+                        />
+                    </Wrapper>
+                </Field2>
+                <Field2 style={{height: "14px"}}>
+                    <Wrapper>
+                        <Label htmlFor="fact">Фактична</Label>
+                        <Input 
+                            id="fact"
+                            type="radio"
+                            value={()=>{}} 
+                            onChange={() => {}}   
+                        />
+                    </Wrapper>
+                    <Wrapper>
+                        <Label htmlFor="plan">Планова</Label>
+                        <Input 
+                            id="plan"
+                            type="radio"
+                            value={()=>{}} 
+                            onChange={() => {}}   
+                        />
+                    </Wrapper>
+                </Field2>
+                <Field2 style={{marginTop: "40px"}}>
+                    <Label>Дата оплати:</Label>
+                    <Input 
+                        type="date"
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+                <Field2>
+                    <Label>Cумма оплати</Label>
+                    <Input 
+                        value={()=>{}}
+                        onChange={()=>{}}  />
+                </Field2>
+            </Modal> */}
+
+
+            
         </Container>
     )
     

@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 export const Container = styled.div`
-padding: 100px 20px; 
+padding: 80px 20px; 
 font-family: sans-serif;
 margin: 0;
 min-height: 100vh;

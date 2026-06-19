@@ -55,9 +55,9 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-    width: 720px;
+    /* width: 720px; */
     display: flex;
-    gap: 20px;
+    gap: 10px;
     max-width: 100%;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(12px);

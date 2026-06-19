@@ -4,12 +4,15 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 
 export const Nav = styled.nav`
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   background: #2c3e50;
   height: 74px;
   padding: 1rem;
   box-sizing: border-box;
   border-bottom: 2px solid white;
+z-index: 1000;
 `;
 
 export const NavLink = styled(RouterNavLink)`
