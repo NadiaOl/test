@@ -5,16 +5,17 @@ export const Container = styled.div`
     gap: 30px;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center;
+    justify-content:  space-between;
+    // width: 100vh;
   `;
 
 export const Card = styled.div`
-    flex: 0 1 auto;
+    // flex: 1 1 auto;
     display: flex;
     justify-content: flex-start;
     gap: 20px;
     padding: 16px;
-    width: 670px;
+    width: calc((100% - 100px) / 2);
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 10px;
     background-color: white;
@@ -137,8 +138,9 @@ align-items: center;
 export const Wrapper2 = styled.div`
 display: flex;
 justify-content: flex-end;
-/* width: 100%; */
+width: 100%;
 align-items: center;
+// background-color: #faf4f4;
 `;
 
 export const Table = styled.table`

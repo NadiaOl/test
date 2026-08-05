@@ -394,9 +394,9 @@ export const ManufacturersList = () => {
         </Card>
       ))}
 
-      <div>
+      <div style={{ width: 'calc(50% - 20px)', height: '40px' }}>
         <Button
-          style={{ width: '400px', height: '40px' }}
+          
           onClick={() => openEditModal()}
         >
           Додати виробника
