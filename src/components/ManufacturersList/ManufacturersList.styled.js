@@ -10,22 +10,29 @@ export const Container = styled.div`
   `;
 
 export const Card = styled.div`
-    // flex: 1 1 auto;
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 16px;
-    width: calc((100% - 100px) / 2);
-    border: 1px solid rgba(0, 0, 0, 0.175);
-    border-radius: 10px;
-    background-color: white;
-    box-shadow: 0px 0px 7px rgb(55, 79, 101);
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 16px;
+  width: calc((100% - 100px) / 2);
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 7px rgb(55, 79, 101);
+
+  /* Добавленные свойства */
+  max-height: 300px; /* Ограничиваем максимальную высоту */
+  /* box-sizing: border-box; Чтобы padding не увеличивал итоговый размер */
 `;
 export const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 20px;
+
+  /* Добавленные свойства */
+  overflow-y: auto; /* Включает вертикальную прокрутку */
+  max-height: 100%; /* Занимает доступную высоту внутри Card */
 `;
   
 
